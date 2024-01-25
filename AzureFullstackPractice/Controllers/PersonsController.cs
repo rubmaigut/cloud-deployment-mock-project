@@ -1,5 +1,6 @@
 using AzureFullstackPractice.Data;
 using AzureFullstackPractice.Models;
+using AzureFullstackPractice.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureFullstackPractice.Controllers;
@@ -9,10 +10,12 @@ namespace AzureFullstackPractice.Controllers;
 public class PersonsController : ControllerBase
 {
     private readonly PersonDbContext _context;
+    private readonly BlobStorageService _blobStorageService;
 
-    public PersonsController(PersonDbContext context)
+    public PersonsController(PersonDbContext context, BlobStorageService blobStorageService)
     {
         _context = context;
+        _blobStorageService = blobStorageService;
     }
 
     [HttpGet]
@@ -28,5 +31,23 @@ public class PersonsController : ControllerBase
         _context.Persons.Add(person);
        await _context.SaveChangesAsync();
         return Ok(person);
+    }
+    
+    [HttpPost("upload")]
+    public async Task<IActionResult> Upload([FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded.");
+        }
+        var tempFilePath = Path.GetTempFileName();
+        
+        using (var stream = System.IO.File.Create(tempFilePath))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        await _blobStorageService.UploadFileAsync("personfullstackblob", tempFilePath);
+        return Ok("File uploaded successfully.");
     }
 }
