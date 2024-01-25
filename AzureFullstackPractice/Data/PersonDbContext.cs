@@ -1,4 +1,4 @@
-using AzureFullstackPractice.Model;
+using AzureFullstackPractice.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AzureFullstackPractice.Data;

@@ -1,5 +1,5 @@
 using AzureFullstackPractice.Data;
-using AzureFullstackPractice.Model;
+using AzureFullstackPractice.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzureFullstackPractice.Controllers;
@@ -9,6 +9,11 @@ namespace AzureFullstackPractice.Controllers;
 public class PersonsController : ControllerBase
 {
     private readonly PersonDbContext _context;
+
+    public PersonsController(PersonDbContext context)
+    {
+        _context = context;
+    }
 
     [HttpGet]
     public List<Person> GetAll()

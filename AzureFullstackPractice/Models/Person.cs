@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AzureFullstackPractice.Model;
+namespace AzureFullstackPractice.Models;
 
 public class Person
 {
