@@ -16,16 +16,17 @@ public class PersonsController : ControllerBase
     }
 
     [HttpGet]
-    public List<Person> GetAll()
+    public async Task<ActionResult<List<Person>>> GetAll()
     {
         return _context.Persons.ToList();
     }
 
     [HttpPost("/addPerson")]
-    public ActionResult<Person> AddPerson(Person person)
+    public async Task<ActionResult<Person>> AddPerson(Person person)
     {
         if (person is null) return BadRequest("wrong information.");
         _context.Persons.Add(person);
+       await _context.SaveChangesAsync();
         return Ok(person);
     }
 }
